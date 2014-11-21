@@ -1,4 +1,4 @@
-# A1 Electionics Ecommerce Sample Application
+# A1 Electronics Ecommerce Sample Application
 
 This repository contains code and support files for the book "Learning AWS".
 
