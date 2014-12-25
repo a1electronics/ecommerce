@@ -21,8 +21,17 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.a1electronics.ecommerce" />
+	<context:component-scan base-package="com.a1electronics.ecommerce.controllers" />
 	
+	<beans:bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+			<beans:property name="basenames">
+				<beans:list>
+					<beans:value>classpath:messages</beans:value>
+				</beans:list>
+			</beans:property>
+			<beans:property name="defaultEncoding" value="UTF-8" />
+	</beans:bean>
+	<beans:bean id="multipartResolver" 	class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 	
 	
 </beans:beans>

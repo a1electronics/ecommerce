@@ -14,8 +14,8 @@
         </encoder>
     </appender>
 
-	<!--<logger name="org.hibernate" level="debug"/> -->
-    <logger name="org.springframework.samples.petclinic" level="debug"/>
+	<logger name="org.hibernate" level="info"/> 
+    <logger name="com.a1.electronics.ecommerce" level="info"/>
          
     <root level="info">
         <appender-ref ref="console"/>
