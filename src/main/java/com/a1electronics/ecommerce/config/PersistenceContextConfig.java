@@ -82,9 +82,9 @@ public class PersistenceContextConfig {
 
 	
 	@Bean
-	public DataSourceInitializer dataSourceInitializer() {
+	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
 		DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
-		dataSourceInitializer.setDataSource(dataSource());
+		dataSourceInitializer.setDataSource(dataSource);
 		ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
 		databasePopulator.addScript(new ClassPathResource(env.getProperty("jdbc.initLocation")));
 		databasePopulator.addScript(new ClassPathResource(env.getProperty("jdbc.dataLocation")));
@@ -97,6 +97,7 @@ public class PersistenceContextConfig {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		factoryBean.setDataSource(dataSource());
+		factoryBean.setPersistenceUnitName("a1ecommerceEntityManager");
 		factoryBean
 				.setPackagesToScan(new String[] { "com.a1electronics.ecommerce.dbo" });
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -116,6 +117,7 @@ public class PersistenceContextConfig {
 		// If the value of this property is true, Hibernate will format the SQL
 		// that is written to the console.
 		jpaProperties.put("hibernate.format_sql",env.getRequiredProperty("hibernate.format_sql"));
+		//jpaProperties.put("hibernate.hbm2ddl.auto",env.getRequiredProperty("hibernate.hbm2ddl.auto"));
 		//To fix the followinf issue
 		//HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
 		jpaProperties.put("hibernate.temp.use_jdbc_metadata_defaults",false);

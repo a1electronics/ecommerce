@@ -39,7 +39,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         OpenEntityManagerInViewFilter viewFilter = new OpenEntityManagerInViewFilter();
         viewFilter.setEntityManagerFactoryBeanName("entityManagerFactory");
         MDCInsertingServletFilter mdcInsertingServletFilter= new  MDCInsertingServletFilter();
-        
         return new Filter[] {characterEncodingFilter,mdcInsertingServletFilter,viewFilter};
     }
 
