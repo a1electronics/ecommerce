@@ -89,9 +89,9 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		charEncodingfilterReg.setInitParameter("forceEncoding", "true");
 		charEncodingfilterReg.addMappingForUrlPatterns(null, false, "/");
 		
-		servletContext.addFilter("MDCInsertFilter",ch.qos.logback.classic.helpers.MDCInsertingServletFilter.class).addMappingForUrlPatterns(null, false, "/");
+		servletContext.addFilter("MDCInsertFilter",ch.qos.logback.classic.helpers.MDCInsertingServletFilter.class).addMappingForUrlPatterns(null, false, "/*");
 		servletContext.addFilter("Spring OpenEntityManagerInViewFilter", org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter.class)
-				.addMappingForUrlPatterns(null, false, "/");
+				.addMappingForUrlPatterns(null, false, "/*");
 		
 		servletContext.addServlet("ViewStatusMessages",ch.qos.logback.classic.ViewStatusMessagesServlet.class).addMapping("/lg/*");
 		

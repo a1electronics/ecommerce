@@ -10,7 +10,7 @@
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%-5level %logger{0} - %msg%n</pattern>
+            <pattern>%n%d | [%thread] | %-5level | %logger{36} | remoteHost::%X{req.remoteHost} | X-forwarded::%X{req.xForwardedFor} | URI::%X{req.requestURI}| %msg</pattern>
         </encoder>
     </appender>
 
