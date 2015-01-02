@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 
 @Entity
@@ -21,7 +23,8 @@ public class ProductCategory extends BaseEntity{
 
 	@Column(name = "Description")
 	String description;
-
+	
+	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productCategory", targetEntity=Products.class, cascade={CascadeType.REMOVE})
 	private Set<Products> users = new HashSet<Products>(0);
 	

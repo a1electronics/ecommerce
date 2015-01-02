@@ -2,9 +2,13 @@ package com.a1electronics.ecommerce.dbo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 
@@ -20,7 +24,7 @@ public class Products extends BaseEntity{
 	String description;
 	
 	@Column (name="Quantity")
-	String quantity;
+	Integer quantity;
 	
 	@Column (name="Price")
 	Integer price;
@@ -28,9 +32,10 @@ public class Products extends BaseEntity{
 	@Column (name="ImagePath")
 	String imagePath;
 
-	
-	@ManyToOne
+	@JsonBackReference
+	@ManyToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name="ProductCategoryToProducts",nullable=false)
+	
 	private ProductCategory productCategory;
 
    public Products(){
@@ -57,12 +62,12 @@ public class Products extends BaseEntity{
 	}
 
 
-	public String getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 

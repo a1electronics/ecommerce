@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.a1electronics.ecommerce.dbo.ProductCategory;
 import com.a1electronics.ecommerce.services.ProductCategoryService;
 
-@Service("ProductCategory")
+@Service("productCategoryService")
 public class ProductCategoryServiceImpl extends GenericServiceImpl<ProductCategory, ProductCategory, Long> implements ProductCategoryService{
 
 	private static final Logger log = (Logger) LoggerFactory.getLogger(ProductCategoryServiceImpl.class);

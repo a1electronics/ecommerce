@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.a1electronics.ecommerce.dbo.ProductCategory;
+import com.a1electronics.ecommerce.dbo.Products;
 import com.a1electronics.ecommerce.services.ProductCategoryService;
+import com.a1electronics.ecommerce.services.ProductsService;
 
 /**
  * Handles requests for the application home page.
@@ -23,8 +25,16 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	public HomeController(){
+	ProductCategoryService productCategoryService;
+	ProductsService productsService;
+	
+	
+    @Autowired
+	public HomeController(ProductCategoryService productCategoryService , ProductsService productsService){
+		this.productCategoryService=productCategoryService;
+		this.productsService=productsService;
 	}
+	
 	/**
 	 * Home Page.
 	 */
@@ -36,8 +46,18 @@ public class HomeController {
 	
 	@RequestMapping(value = "/pdc", method = RequestMethod.GET)
 	@ResponseBody
-	public List<ProductCategory> getProductCategoryAll(){
-		return null;
+	public List<Products> getProductCategoryAll(){
+		Products product=  new Products();
+		product.setProductName("Sony Tape Recorder+2");
+		product.setPrice(1000);
+		product.setQuantity(100000);
+		product.setProductCategory(productCategoryService.findById(1L));
+		product=productsService.create(product);
+		product=productsService.findById(product.getId());
+		product.setProductName("Edited Name");
+		productsService.update(product, product.getId());
+		productsService.delete(product.getId());
+		return productsService.findAll();
 	}
 	
 	
