@@ -7,17 +7,57 @@
 
     <!-- To enable JMX Management -->
     <jmxConfigurator/>
-
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%n%d | [%thread] | %-5level | %logger{36} | remoteHost::%X{req.remoteHost} | X-forwarded::%X{req.xForwardedFor} | URI::%X{req.requestURI}| %msg</pattern>
-        </encoder>
-    </appender>
-
-	<logger name="org.hibernate" level="info"/> 
-    <logger name="com.a1.electronics.ecommerce" level="info"/>
          
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		
+		<file>/tmp/a1ecommerce.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>a1ecommerce:%d{ISO8601,UTC}|%highlight(%-5level)|[%thread]|%cyan(%logger{15})|%X{req.remoteHost}|%X{req.xForwardedFor}|%X{req.requestURI}:%m%n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>/tmp/a1ecommerce.%i.log.zip</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>10</MaxIndex>
+		</rollingPolicy>
+
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50MB</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+		<Pattern>a1ecommerce:%d{ISO8601,UTC}|%highlight(%-5level)|[%thread]|%cyan(%logger{15})|%X{req.remoteHost}|%X{req.xForwardedFor}|%X{req.requestURI}:%m%n</Pattern>	
+		</encoder>
+	</appender>
+
+	<appender name="ASYNC500STDOUT" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>500</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<appender-ref ref="STDOUT" />
+	</appender>
+
+	<appender name="ASYNC500FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>500</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<appender-ref ref="FILE" />
+	</appender>
+
+	<logger name="org.apache" level="INFO" />
+	<logger name="httpclient" level="INFO" />
+	<logger name="org.hibernate.type" level="INFO" additivity="true" />
+	<logger name="org.hibernate" level="INFO" />
+	<logger name="org.springframework" level="INFO" />
+	<logger name="net.sf.hibernate" additivity="true" level="INFO" />
+	<logger name="org.apache.http.impl.conn.tsccm" level="INFO" />
+	<logger name="com.a1electronics.ecommerce" level="info"/>
+
+
     <root level="info">
-        <appender-ref ref="console"/>
+        <appender-ref ref="ASYNC500FILE"/>
+        <appender-ref ref="ASYNC500STDOUT"/>
     </root>
 </configuration>

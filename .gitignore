@@ -9,7 +9,9 @@ build/
 
 # Mobile Tools for Java (J2ME)
 target/
-
+Servers/
+RemoteSystemsTempFiles/
+.metadata/
 # Package Files #
 *.jar
 *.war

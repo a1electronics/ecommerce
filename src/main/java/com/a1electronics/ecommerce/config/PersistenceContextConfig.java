@@ -61,7 +61,7 @@ public class PersistenceContextConfig {
 		dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
 		dataSource.setUser(env.getProperty("jdbc.username"));
 		dataSource.setPassword(env.getProperty("jdbc.password"));
-		dataSource.setAcquireIncrement(10);
+		dataSource.setAcquireIncrement(20);
 		dataSource.setAcquireRetryAttempts(30);
 		dataSource.setAcquireRetryDelay(1000);
 		dataSource.setAutoCommitOnClose(false);
