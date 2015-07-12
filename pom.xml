@@ -81,7 +81,11 @@
 			<artifactId>dozer</artifactId>
 			<version>5.5.1</version>
 		</dependency>
-
+		<dependency>
+    		<groupId>com.h2database</groupId>
+    		<artifactId>h2</artifactId>
+    		<version>1.4.187</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
