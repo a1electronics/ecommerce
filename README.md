@@ -35,3 +35,21 @@ The URL to launch the application is http://localhost:8888/a1ecommerce
 2) To build it from STS you will need to import the project. Open
 
 File -> Import -> Maven -> Existing Maven project
+
+## CloudFormation script
+You can execute the cloudformation script a1ecommerceaws.json from command line if the AWS cmdline is installed in your machine.
+please read Scripting auto scaling in chapter 4 to install the AWS command line tools.
+
+To create the  CloudFormation stack fire the follwoing on the command line
+
+aws cloudformation create-stack --stack-name a1ecommerce --template-body
+file://a1ecommerceaws.json --region=us-east-1
+
+The script might fail due to an unavailable availability zone . 
+
+To fix it first query AWS for the available  availability zones 
+
+aws ec2 describe-availability-zones --region=us-east-1
+
+and then replace the value of "AZ" on line 264,268 with any AZ except us-east-1a
+

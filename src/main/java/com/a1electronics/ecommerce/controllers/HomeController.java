@@ -2,15 +2,18 @@ package com.a1electronics.ecommerce.controllers;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.a1electronics.ecommerce.dbo.ProductCategory;
 import com.a1electronics.ecommerce.dbo.Products;
@@ -61,4 +64,23 @@ public class HomeController {
 	}
 	
 	
+	@RequestMapping(value = "/categories", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ProductCategory> getAllCategories(){
+		return productCategoryService.findAll();
+	}
+	
+	@RequestMapping (value = "/products/{catId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<Products> getProductsInCategory(@PathVariable("catId") int catId){
+		//return productCategoryService.
+		return productCategoryService.getProductsByCategory(catId);
+	}
+	
+	@RequestMapping (value = "/product/{productId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Products getProductsInCategory(@PathVariable("productId") long productId){
+		//return productCategoryService.
+		return productsService.findById(productId);
+	}
 }

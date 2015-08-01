@@ -26,7 +26,7 @@ public class ProductCategory extends BaseEntity{
 	
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productCategory", targetEntity=Products.class, cascade={CascadeType.REMOVE})
-	private Set<Products> users = new HashSet<Products>(0);
+	private Set<Products> products = new HashSet<Products>(0);
 	
 	public ProductCategory(){
 		super();
@@ -48,12 +48,12 @@ public class ProductCategory extends BaseEntity{
 		this.description = description;
 	}
 
-	public Set<Products> getUsers() {
-		return users;
+	public Set<Products> getProducts() {
+		return products;
 	}
 
-	public void setUsers(Set<Products> users) {
-		this.users = users;
+	public void setProducts(Set<Products> users) {
+		this.products = users;
 	}
 	
 }

@@ -68,7 +68,7 @@
       "ConstraintDescription":"must be between 0 and 30"
     },
     "DBUser":{
-      "Default":"a1ecommerce",
+      "Default":"a1dbroot",
       "NoEcho":"true",
       "Description":"The database admin account username",
       "Type":"String",
@@ -78,7 +78,7 @@
       "ConstraintDescription":"must begin with a letter and contain only alphanumeric characters."
     },
     "DBPassword":{
-      "Default":"a1ecommerce",
+      "Default":"a1dbroot",
       "NoEcho":"true",
       "Description":"The database admin account password",
       "Type":"String",
@@ -213,11 +213,11 @@
       "ConstraintDescription":"must be true or false."
     },
     "KeyPairName":{
-      "Description":"Name of an existing EC2 KeyPair (find or create here: https://console.aws.amazon.com/ec2/v2/home#KeyPairs: )",
+      "Description":"Name of an existing EC2 KeyPair , by default using one created in chapter 3 , under Creating EC2 instance key pairs",
       "NoEcho":"true",
       "MinLength":"1",
       "MaxLength":"64",
-      "Default":"",
+      "Default":"ec2AccessKey",
       "Type":"String",
       "AllowedPattern":"[-_ a-zA-Z0-9]*",
       "ConstraintDescription":"can contain only alphanumeric characters, spaces, dashes and underscores."
@@ -230,33 +230,42 @@
       "Default":"0.0.0.0/0",
       "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription":"must be a valid CIDR range of the form x.x.x.x/x."
+    },
+    "AMIImageId":{
+      "Description":"Use your own ImageId for LaunchConfig, by default using a default image id from us-east-1 region ",
+      "Type":"String",
+      "MinLength":"9",
+      "MaxLength":"18",
+      "Default":"ami-d05e75b8",
+      "AllowedPattern":"[-_ a-zA-Z0-9]*",
+      "ConstraintDescription":"Must be a valid imageID, use the one created under AMI Creation in chapter 4."
     }
   },
   "Mappings":{
     "SubnetConfig":{
       "VPC":{
-        "CIDR":"10.44.0.0/16",
-        "AZ":"us-west-2a"
+        "CIDR":"10.31.0.0/16",
+        "AZ":"us-east-1a"
       },
       "Public":{
-        "CIDR":"10.44.0.0/24",
-        "AZ":"us-west-2a"
+        "CIDR":"10.31.16.0/20",
+        "AZ":"us-east-1a"
       },
       "Private":{
-        "CIDR":"10.44.1.0/24",
-        "AZ":"us-west-2a"
+        "CIDR":"10.31.80.0/20",
+        "AZ":"us-east-1a"
       },
       "Bastion":{
-        "CIDR":"10.44.2.0/24",
-        "AZ":"us-west-2a"
+        "CIDR":"10.31.96.0/20",
+        "AZ":"us-east-1a"
       },
       "HAPublic":{
-        "CIDR":"10.44.3.0/24",
-        "AZ":"us-west-2c"
+        "CIDR":"10.31.48.0/20",
+        "AZ":"us-east-1d"
       },
       "DbPrivate":{
-        "CIDR":"10.44.4.0/24",
-        "AZ":"us-west-2c"
+        "CIDR":"10.31.64.0/20",
+        "AZ":"us-east-1d"
       }
     },
      "RegionMapNat":{
@@ -1043,7 +1052,7 @@
         ]
       }
     },
-    "WebSecurityGroupEgress801":{
+    "WebSecurityGroupEgress3306":{
       "DependsOn":[
         "WebSecurityGroupPublic"
       ],
@@ -1053,8 +1062,8 @@
           "Ref":"WebSecurityGroupPublic"
         },
         "IpProtocol":"tcp",
-        "FromPort":"8080",
-        "ToPort":"8080",
+        "FromPort":"3306",
+        "ToPort":"3306",
         "DestinationSecurityGroupId":{
           "Fn::GetAtt":[
             "PrivateSecurityGroup",
@@ -1063,26 +1072,7 @@
         }
       }
     },
-    "WebSecurityGroupEgress4431":{
-      "DependsOn":[
-        "WebSecurityGroupPublic"
-      ],
-      "Type":"AWS::EC2::SecurityGroupEgress",
-      "Properties":{
-        "GroupId":{
-          "Ref":"WebSecurityGroupPublic"
-        },
-        "IpProtocol":"tcp",
-        "FromPort":"8443",
-        "ToPort":"8443",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "PrivateSecurityGroup",
-            "GroupId"
-          ]
-        }
-      }
-    },
+    
     "WebSecurityGroupEgress80":{
       "DependsOn":[
         "WebSecurityGroupPublic"
@@ -1093,14 +1083,9 @@
           "Ref":"WebSecurityGroupPublic"
         },
         "IpProtocol":"tcp",
-        "FromPort":"8080",
-        "ToPort":"8080",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "ELBSecurityGroup",
-            "GroupId"
-          ]
-        }
+        "FromPort":"80",
+        "ToPort":"80",
+        "CidrIp":"0.0.0.0/0"
       }
     },
     "WebSecurityGroupEgress443":{
@@ -1113,14 +1098,9 @@
           "Ref":"WebSecurityGroupPublic"
         },
         "IpProtocol":"tcp",
-        "FromPort":"8443",
-        "ToPort":"8443",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "ELBSecurityGroup",
-            "GroupId"
-          ]
-        }
+        "FromPort":"443",
+        "ToPort":"443",
+		"CidrIp":"0.0.0.0/0"
       }
     },
     "BastionSecurityGroup":{
@@ -1151,7 +1131,8 @@
         ]
       }
     },
-    "BastionSecurityGroupEgress3306":{
+    
+    "BastionSecurityGroupEgressAll":{
       "DependsOn":[
         "BastionSecurityGroup"
       ],
@@ -1160,75 +1141,10 @@
         "GroupId":{
           "Ref":"BastionSecurityGroup"
         },
-        "IpProtocol":"tcp",
-        "FromPort":"3306",
-        "ToPort":"3306",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "PrivateSecurityGroup",
-            "GroupId"
-          ]
-        }
-      }
-    },
-    "BastionSecurityGroupEgress222":{
-      "DependsOn":[
-        "BastionSecurityGroup"
-      ],
-      "Type":"AWS::EC2::SecurityGroupEgress",
-      "Properties":{
-        "GroupId":{
-          "Ref":"BastionSecurityGroup"
-        },
-        "IpProtocol":"tcp",
-        "FromPort":"22",
-        "ToPort":"22",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "PrivateSecurityGroup",
-            "GroupId"
-          ]
-        }
-      }
-    },
-    "BastionSecurityGroupEgress221":{
-      "DependsOn":[
-        "BastionSecurityGroup"
-      ],
-      "Type":"AWS::EC2::SecurityGroupEgress",
-      "Properties":{
-        "GroupId":{
-          "Ref":"BastionSecurityGroup"
-        },
-        "IpProtocol":"tcp",
-        "FromPort":"22",
-        "ToPort":"22",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "WebSecurityGroupPublic",
-            "GroupId"
-          ]
-        }
-      }
-    },
-    "BastionSecurityGroupEgress22":{
-      "DependsOn":[
-        "BastionSecurityGroup"
-      ],
-      "Type":"AWS::EC2::SecurityGroupEgress",
-      "Properties":{
-        "GroupId":{
-          "Ref":"BastionSecurityGroup"
-        },
-        "IpProtocol":"tcp",
-        "FromPort":"22",
-        "ToPort":"22",
-        "DestinationSecurityGroupId":{
-          "Fn::GetAtt":[
-            "NatSecurityGroup",
-            "GroupId"
-          ]
-        }
+        "IpProtocol": "tcp",
+        "FromPort": "0",
+        "ToPort": "65535",
+        "CidrIp": "0.0.0.0/0"
       }
     },
     "PrivateSecurityGroup":{
@@ -1589,13 +1505,9 @@
         "KeyName":{
           "Ref":"KeyPairName"
         },
-       
+		"AssociatePublicIpAddress" : "true",       
         "ImageId":{
-          "Fn::FindInMap":[
-            "RegionMap",
-            {"Ref":"AWS::Region"},
-            "AMI"
-          ]
+          "Ref":"AMIImageId"
         },
         "SecurityGroups" : [ { "Ref" : "WebSecurityGroupPublic" } ],
         "InstanceType":{

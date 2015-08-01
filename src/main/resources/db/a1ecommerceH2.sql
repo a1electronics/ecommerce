@@ -10,8 +10,6 @@ CREATE TABLE `ProductCategory` (
   PRIMARY KEY (`id`));
 
 
-
-
 CREATE TABLE `Products` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `Name` TINYTEXT NULL,
