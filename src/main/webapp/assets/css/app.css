@@ -1,0 +1,32 @@
+.category{
+	cursor: pointer;
+	border:1px solid #cccccc;
+	padding:5px;
+}
+.category .categoryName{
+	font-weight: bold;
+}
+.product{
+	border:1px solid #ccc;
+	height:400px;
+	overflow: hidden;
+	text-align: justify;
+	margin:3px;
+}
+.productName{
+	font-weight: bold;
+}
+.productImage{
+	width: 100%;
+	height: 150px;
+	text-align: center;
+	border-bottom: 1px solid #ccc;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size:contain;
+}
+.productImage img{
+	width:50%;
+	height:auto;
+	margin:0 auto;
+}
